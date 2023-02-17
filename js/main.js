@@ -43,14 +43,14 @@ const kittenDataList = [kittenData1, kittenData2, kittenData3];
 
 // ---------------------------ESTAS SON FUNCIONES-------------------- 
 
-function renderkittenList (kittenDataList) {
-
+function renderKittenList (kittenDataList) {
+listElement.innerHTML = '';
   for (let i = 0; i < kittenDataList.length; i++) {
     listElement.innerHTML += renderKitten(kittenDataList[i]);
   }
 
 }
-renderkittenList(kittenDataList);
+renderKittenList(kittenDataList);
 
 function renderKitten(kitten) {
 
@@ -60,7 +60,6 @@ const kittenContent = `<li class="card">
     class="card_img"
     src= "${kitten.image}"
     alt="gatito"
-    
   />
   <h3 class="card_title">${kitten.name}</h3>
   <h4 class="card_race">${kitten.race}</h4>
@@ -73,20 +72,45 @@ return kittenContent;
 
 }
 
+//Adicionar nuevo gatito
+
+
 
 function addNewKitten(event) {
+  event.preventDefault();
+
   const valueDesc = inputDesc.value;
   const valuePhoto = inputPhoto.value;
   const valueName = inputName.value;
+  const valueRace = inputRace.value;
 
-  if (valueDesc === '' || valuePhoto === '' || valueName === '') {
+  if (valueDesc === "" || valuePhoto === "" || valueName === "") {
+    labelMessageError.innerHTML = "¡Uy! parece que has olvidado algo";
+  } else {
+    if (valueDesc !== "" || valuePhoto !== "" || valueName !== "") {
+        labelMessageError.innerHTML = "";
 
-  labelMessageError.innerHTML = "¡Uy! parece que has olvidado algo"
-  //completa el código
-} else {
-  //completa el código
+    const newKittenDataObject = {
+      desc : inputDesc.value,
+      photo : inputPhoto.value,
+      name : inputName.value,
+      race : inputRace.value,
+  }
+
+  kittenDataList.push(newKittenDataObject);
+
+  renderKittenList(kittenDataList);
+
+  inputDesc.value = '';
+  inputName.value = '';
+  inputPhoto.value = '';
+  inputRace.value = '';
+  }
+  labelMessageError.innerHTML = 'Mola! Un nuevo gatito en Adalab!';
+
+  }
 }
-}
+
 
 
 function showNewCatForm() {
@@ -100,7 +124,7 @@ function hideNewCatForm() {
 }
 
 const filterKitten = (event) => {
-  
+
   event.preventDefault();
   const descrSearchText = input_search_desc.value;
   const descrSearchRace = input_search_race.value;
@@ -110,7 +134,7 @@ const filterKitten = (event) => {
     msjBtnSearch.innerHTML += 'no se ha rellenado el campo de descripción'
   }
   if (descrSearchRace === '' ) {
-    msjBtnSearch.innerHTML = 'no ha rellenado el campo raza';    
+    msjBtnSearch.innerHTML = 'no ha rellenado el campo raza';
 
   for (const kittenItem of kittenDataList) {
     //console.log(kittenData3.desc);
