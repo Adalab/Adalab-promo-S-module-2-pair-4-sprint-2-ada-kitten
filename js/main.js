@@ -16,6 +16,10 @@ const button = document.querySelector('.js-button');
 const btnSearch = document.querySelector('.js-btn-search');
 const msjBtnSearch = document.querySelector('.msj-btn-search');
 
+const GITHUB_USER = 'verosalandy';
+const SERVER_URL = `https://dev.adalab.es/api/kittens/${GITHUB_USER}`;
+
+
 const kittenData1 = {
   image: 'https://dev.adalab.es/gato-siames.webp',
   name: 'Anastacio',
@@ -39,21 +43,35 @@ const kittenData3 = {
   race: 'Maine Coon',
 };
 
-const kittenDataList = [kittenData1, kittenData2, kittenData3];
+//const kittenDataList = [kittenData1, kittenData2, kittenData3];
+let kittenDataList = [];
+fetch(SERVER_URL, {
+  method: 'GET',
+  headers: {'Content-Type': 'application/json'},
+}).then((responses) => responses.json())
+.then((data) => {
+  kittenDataList = data.results
+  renderKittenList(kittenDataList);
+})
+
 
 // ---------------------------ESTAS SON FUNCIONES-------------------- 
 
 function renderKittenList (kittenDataList) {
 listElement.innerHTML = '';
-  for (let i = 0; i < kittenDataList.length; i++) {
-    listElement.innerHTML += renderKitten(kittenDataList[i]);
+  for (const eachKitten of kittenDataList) {
+    listElement.innerHTML += renderKitten(eachKitten)
+    
   }
 
+  /*for (let i = 0; i < kittenDataList.length; i++) {
+    listElement.innerHTML += renderKitten(kittenDataList[i]);
+  }*/
+
 }
-renderKittenList(kittenDataList);
+
 
 function renderKitten(kitten) {
-
 const kittenContent = `<li class="card">
 <article>
   <img
