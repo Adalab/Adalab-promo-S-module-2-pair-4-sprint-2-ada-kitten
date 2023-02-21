@@ -16,10 +16,6 @@ const button = document.querySelector('.js-button');
 const btnSearch = document.querySelector('.js-btn-search');
 const msjBtnSearch = document.querySelector('.msj-btn-search');
 
-const GITHUB_USER = 'verosalandy';
-const SERVER_URL = `https://dev.adalab.es/api/kittens/${GITHUB_USER}`;
-
-
 const kittenData1 = {
   image: 'https://dev.adalab.es/gato-siames.webp',
   name: 'Anastacio',
@@ -43,16 +39,35 @@ const kittenData3 = {
   race: 'Maine Coon',
 };
 
-//const kittenDataList = [kittenData1, kittenData2, kittenData3];
+// parte de servidor; fetch/json/localStorage
+
+const GITHUB_USER = 'verosalandy';
+const SERVER_URL = `https://dev.adalab.es/api/kittens/${GITHUB_USER}`;
+
 let kittenDataList = [];
-fetch(SERVER_URL, {
+
+const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
+if (kittenListStored !== null){
+  kittenDataList = kittenListStored;
+  renderKittenList(kittenDataList);
+} else{
+  fetch(SERVER_URL, {
   method: 'GET',
   headers: {'Content-Type': 'application/json'},
 }).then((responses) => responses.json())
-.then((data) => {
+  .then((data) => {
   kittenDataList = data.results
-  renderKittenList(kittenDataList);
+  localStorage.setItem('kittensList', JSON.stringify(kittenDataList))
+  renderKittenList(kittenDataList);//kittenDataLiist es respues del servido
 })
+ .catch((error) => {
+      console.error(error);
+    });
+}
+//const kittenDataList = [kittenData1, kittenData2, kittenData3];
+
+
+
 
 
 // ---------------------------ESTAS SON FUNCIONES-------------------- 
@@ -70,8 +85,8 @@ listElement.innerHTML = '';
 
 }
 
-
-function renderKitten(kitten) {
+//el renderKitten es funcion global que solo pinta 1 gatito. La funcion de arriba renderKittenList hace con el for que se vayan pintando los gatos de kittenDataList utilizando fncion de renderKitten
+function renderKitten(kitten) { 
 const kittenContent = `<li class="card">
 <article>
   <img
@@ -147,12 +162,15 @@ const filterKitten = (event) => {
   const descrSearchText = input_search_desc.value;
   const descrSearchRace = input_search_race.value;
 
-
   if (descrSearchText === '')   {
-    msjBtnSearch.innerHTML += 'no se ha rellenado el campo de descripción'
+    msjBtnSearch.innerHTML += 'no ha rellenado el campo de descripción'
   }
   if (descrSearchRace === '' ) {
-    msjBtnSearch.innerHTML = 'no ha rellenado el campo raza';
+    msjBtnSearch.innerHTML = 'no ha rellenado el campo de raza';
+  }
+  if (descrSearchText === '' || descrSearchRace === '' ) { 
+    msjBtnSearch.innerHTML = 'no ha rellenado los campos de descripción y raza';
+  } 
 
   for (const kittenItem of kittenDataList) {
     //console.log(kittenData3.desc);
@@ -173,8 +191,8 @@ if( kittenData2.desc.includes(descrSearchText) ) {
 if( kittenData3.desc.includes(descrSearchText) ) {
  listElement.innerHTML += renderKitten(kittenData3);
 }
- }
 }
+
 
 const cancelNewKitten = (event) => {
   event.preventDefault();
