@@ -102,7 +102,44 @@ const kittenContent = `<li class="card">
 </article>
 </li>`;
 return kittenContent;
+}
 
+function renderKitten(kitten) {
+  for (const item of kittenContent) {
+
+  const liElement = document.createElement('li');
+  const articleElement = document.createElement('article')
+
+  const imgElement = document.createElement('img');
+  imgElement.setAttribute('src', item.image);
+  imgElement.setAttribute('class', 'data list'); //ver si clase esta con . o sin
+
+  const h3Element = document.createElement('h3');
+  const cardTitleContent = document.createTextNode('item.name');
+  h3Element.appendChild(cardTitleContent);
+
+  const h4Element = document.createElement('h4');
+  const cardRaceContent = document.createTextNode('item.race');
+  h4Element.appendChild(cardRaceContent);
+
+  const pElement = document.createElement('p');
+  const cardDescContent =document.createTextNode('item.desc');
+  pElement.appendChild(cardDescContent);
+
+
+ articleElement.appendChild(imgElement);
+ articleElement.appendChild(h3Element);
+ articleElement.appendChild(h4Element);
+ articleElement.appendChild(pElement);
+
+
+  liElement.appendChild(articleElement);
+  listElement.appendChild(liElement);
+  
+  //liElement.classList.add('list');
+  //....
+  //Completa el código
+}
 }
 
 //Adicionar nuevo gatito
